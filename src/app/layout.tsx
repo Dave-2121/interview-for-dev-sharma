@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/Header";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <main className="max-w-7xl mx-auto px-4 mt-8">{children}</main>
+        <Suspense>
+          <main className="max-w-7xl mx-auto px-4 mt-8">{children}</main>
+        </Suspense>
       </body>
     </html>
   );
