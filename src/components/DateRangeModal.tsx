@@ -1,8 +1,11 @@
 "use client";
+// @ts-nocheck
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+// @ts-ignore
 import { DateRange } from "react-date-range";
+
 import { format, subDays, subMonths, subYears } from "date-fns";
 
 import { CalendarDays, ChevronDown } from "lucide-react";

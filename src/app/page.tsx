@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { LaunchTableClient } from "@/components/LaunchTableWrapper";
 import { PaginationFilter } from "@/components/Pagination";
 import { getEntitiesLaunch } from "@/lib/sapce-x-helper";

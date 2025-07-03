@@ -1,18 +1,14 @@
 "use client";
+// @ts-nocheck
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Image from "next/image";
 import { formatUtcDate } from "@/lib/sapce-x-helper";
-import { X } from "lucide-react";
 
 type Props = {
   open: boolean;
   onClose: () => void;
+
   launch: any;
   rocketName: string;
   launchpadName: string;

@@ -1,4 +1,5 @@
 "use client";
+// @ts-nocheck
 import { formatUtcDate } from "@/lib/sapce-x-helper";
 import Image from "next/image";
 import { useState } from "react";

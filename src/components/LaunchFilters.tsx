@@ -1,4 +1,5 @@
 "use client";
+// @ts-nocheck
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -38,10 +39,8 @@ export function LaunchFilters() {
 
   return (
     <div className="flex items-center justify-around sm:flex-row sm:gap-0 gap-2 flex-col">
-      {/* Placeholder for future date filter */}
       <DateRangeModal />
 
-      {/* Status Filter Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 text-sm">

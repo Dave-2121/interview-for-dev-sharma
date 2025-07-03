@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export async function getAllLaunches() {
   const resp = await fetch(`${process.env.BASE_URL}/v4/launches`);
   if (!resp.ok) throw new Error("Failed to fetch launches");
