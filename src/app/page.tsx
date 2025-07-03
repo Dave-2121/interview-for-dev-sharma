@@ -29,8 +29,12 @@ export default async function Home({
     if (startDate) query.date_utc.$gte = new Date(startDate).toISOString();
     if (endDate) query.date_utc.$lte = new Date(endDate).toISOString();
   }
-  if (!isNaN(new Date(startDate))) {
+
+  if (startDate && !isNaN(new Date(startDate).getTime())) {
     query.date_utc.$gte = new Date(startDate).toISOString();
+  }
+  if (endDate && !isNaN(new Date(endDate).getTime())) {
+    query.date_utc.$lte = new Date(endDate).toISOString();
   }
 
   const { docs: launches, totalPages } = await getPaginatedLaunches(
