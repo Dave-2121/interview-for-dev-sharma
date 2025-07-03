@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { LaunchFilters } from "./LaunchFilters";
+import { Suspense } from "react";
 
 export function Header() {
   return (
@@ -11,7 +12,9 @@ export function Header() {
           <Image src="/logo.png" alt="SpaceX Logo" width={260} height={32} />
         </div>
       </header>
-      <LaunchFilters />
+      <Suspense fallback={<div>Loading filters...</div>}>
+        <LaunchFilters />
+      </Suspense>
     </>
   );
 }
