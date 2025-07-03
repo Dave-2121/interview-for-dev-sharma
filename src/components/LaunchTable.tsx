@@ -1,5 +1,8 @@
+"use client";
 import { formatUtcDate } from "@/lib/sapce-x-helper";
 import Image from "next/image";
+import { useState } from "react";
+import { LaunchDetailModal } from "./LaunchDetailModal";
 
 type Props = {
   launches: any[];
@@ -18,6 +21,9 @@ export function LaunchTable({
   page,
   isLoading,
 }: Props) {
+  const [selectedLaunch, setSelectedLaunch] = useState<any | null>(null);
+  const [open, setOpen] = useState(false);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-10">
@@ -31,6 +37,7 @@ export function LaunchTable({
       </div>
     );
   }
+
   return (
     <div className="rounded-lg border overflow-x-auto ">
       <table className="w-full text-sm text-left">
@@ -45,7 +52,14 @@ export function LaunchTable({
             <th className="px-4 py-3 text-right">Rocket</th>
           </tr>
         </thead>
-        <tbody className="">
+        <tbody>
+          {!isLoading && launches.length === 0 && (
+            <tr>
+              <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
+                No results found for the specified filter.
+              </td>
+            </tr>
+          )}
           {launches.map((l, i) => {
             const status = l.upcoming
               ? "Upcoming"
@@ -56,6 +70,10 @@ export function LaunchTable({
             return (
               <tr
                 key={i}
+                onClick={() => {
+                  setSelectedLaunch(l);
+                  setOpen(true);
+                }}
                 className="border-t hover:bg-gray-100 cursor-pointer transition-colors duration-200"
               >
                 <td className="px-4 py-3 text-[#1F2937]">{i + 1}</td>
@@ -73,29 +91,32 @@ export function LaunchTable({
                   <span
                     className={`p-2 rounded-xl text-sm text-center font-semibold ${
                       status === "Success"
-                        ? "bg-[#DEF7EC]"
+                        ? "bg-[#DEF7EC] text-[#03543F]"
                         : status === "Failure"
-                        ? "bg-[#FDE2E1]"
-                        : "bg-[#FEF3C7]"
-                    } ${
-                      status === "Success"
-                        ? "text-[#03543F]"
-                        : status === "Failure"
-                        ? "text-[#981B1C]"
-                        : "text-[#92400F]"
-                    }}`}
+                        ? "bg-[#FDE2E1] text-[#981B1C]"
+                        : "bg-[#FEF3C7] text-[#92400F]"
+                    }`}
                   >
                     {status}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  {rocketMap.get(l.rocket) || "unknown"}
+                  {rocketMap.get(l.rocket) || "Unknown"}
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+
+      <LaunchDetailModal
+        open={open}
+        onClose={() => setOpen(false)}
+        launch={selectedLaunch}
+        rocketName={rocketMap.get(selectedLaunch?.rocket) || "Unknown"}
+        launchpadName={launchpadMap.get(selectedLaunch?.launchpad) || "Unknown"}
+        orbitName={payloadMap.get(selectedLaunch?.payloads?.[0]) || "Unknown"}
+      />
     </div>
   );
 }

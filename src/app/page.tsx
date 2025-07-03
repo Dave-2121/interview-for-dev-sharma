@@ -6,10 +6,17 @@ import { getPaginatedLaunches } from "@/lib/space-x-api";
 export default async function Home({
   searchParams,
 }: {
-  searchParams?: { page?: string };
+  searchParams?: {
+    page?: string;
+    status?: string;
+    start?: string;
+    end?: string;
+  };
 }) {
   const page = parseInt(searchParams?.page || "1");
   const status = searchParams?.status || "all";
+  const startDate = searchParams?.start;
+  const endDate = searchParams?.end;
 
   const query: any = {};
 
@@ -17,9 +24,19 @@ export default async function Home({
   else if (status === "success") query.success = true;
   else if (status === "failed") query.success = false;
 
+  if (startDate || endDate) {
+    query.date_utc = {};
+    if (startDate) query.date_utc.$gte = new Date(startDate).toISOString();
+    if (endDate) query.date_utc.$lte = new Date(endDate).toISOString();
+  }
+  if (!isNaN(new Date(startDate))) {
+    query.date_utc.$gte = new Date(startDate).toISOString();
+  }
+
   const { docs: launches, totalPages } = await getPaginatedLaunches(
     page,
-    query
+    query,
+    10
   );
 
   const rocketIds = [...new Set(launches.map((l) => l.rocket))];
@@ -31,6 +48,7 @@ export default async function Home({
     launchpadIds,
     payloadIds
   );
+
   return (
     <div className="mt-6 space-y-6 flex flex-col">
       <LaunchTableClient

@@ -40,6 +40,8 @@ export async function getOrbit(ids: string[]) {
 type LaunchQuery = {
   upcoming?: boolean;
   success?: boolean;
+  startDate?: string; // e.g., "2024-12-01"
+  endDate?: string; // e.g., "2025-07-01"
 };
 
 export async function getPaginatedLaunches(
@@ -47,6 +49,16 @@ export async function getPaginatedLaunches(
   query: LaunchQuery = {},
   limit = 10
 ) {
+  const { startDate, endDate, ...restQuery } = query;
+
+  const mongoQuery: any = { ...restQuery };
+
+  if (startDate || endDate) {
+    mongoQuery.date_utc = {};
+    if (startDate) mongoQuery.date_utc.$gte = new Date(startDate).toISOString();
+    if (endDate) mongoQuery.date_utc.$lte = new Date(endDate).toISOString();
+  }
+
   const res = await fetch("https://api.spacexdata.com/v4/launches/query", {
     method: "POST",
     headers: {
@@ -54,7 +66,7 @@ export async function getPaginatedLaunches(
     },
     cache: "no-store",
     body: JSON.stringify({
-      query,
+      query: mongoQuery,
       options: {
         page,
         limit,
